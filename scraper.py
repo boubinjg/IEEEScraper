@@ -3,11 +3,6 @@ import requests
 import pandas as pd
 import time
 
-import os
-import requests
-import pandas as pd
-import time
-
 API_KEY = os.getenv("IEEE_API_KEY") #Add your key as an environment variable
 BASE_URL = "https://ieeexploreapi.ieee.org/api/v1/search/articles"
 
