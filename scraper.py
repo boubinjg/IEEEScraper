@@ -6,9 +6,8 @@ import time
 API_KEY = os.getenv("IEEE_API_KEY") #Add your key as an environment variable
 BASE_URL = "https://ieeexploreapi.ieee.org/api/v1/search/articles"
 
-#SEARCH_TERM = '((AI OR LLM OR GAI OR "generative AI" OR "language model") AND (align* OR RAG OR "retrieval augmented generation” ) AND ("social robotics" OR anthropomorphism OR companion* OR “mind perception”))'
-SEARCH_TERM = "generative AI"
-MAX_RECORDS_PER_CALL = 200                # IEEE max is usually 200
+SEARCH_TERM = '((AI OR LLM OR GAI OR "generative AI" OR "language model") AND (align* OR RAG OR "retrieval augmented generation” ) AND ("social robotics" OR anthropomorphism OR companion* OR “mind perception”))'
+MAX_RECORDS_PER_CALL = 200                # IEEE max is 200, I think, so don't increase this
 
 def fetch_all_metadata(query):
     all_records = []
@@ -24,12 +23,12 @@ def fetch_all_metadata(query):
             "start_record": start_record
         }
 
-        #response = requests.get(BASE_URL, params=params)
-        #response.raise_for_status()
-        #data = response.json()
+        response = requests.get(BASE_URL, params=params)
+        response.raise_for_status()
+        data = response.json()
 
         if total_records is None:
-            #total_records = int(data.get("total_records", 0))
+            total_records = int(data.get("total_records", 0))
             print(f"Total records found: {total_records}")
             print("Your Daily API Limit is at most 40,000 papers from 200 API calls. Do you wish to scrape these records?")
             user_resp = input("Type Y|y to continue, or anything else to exit: ")
@@ -39,6 +38,7 @@ def fetch_all_metadata(query):
             else:
                 print("Scraping...")
         
+        #If we want things that are not "articles" we can change this. 
         articles = data.get("articles", [])
         if not articles:
             break
